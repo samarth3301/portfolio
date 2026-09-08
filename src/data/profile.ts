@@ -25,5 +25,4 @@ export const links: SocialLink[] = [
   { label: "GitHub", href: "https://github.com/samarth3301", icon: "github" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/samarth0316/", icon: "linkedin" },
   { label: "Twitter", href: "https://twitter.com/samarth_0310", icon: "x" },
-  { label: "Website", href: "https://samarthh.me", icon: "globe" },
 ];

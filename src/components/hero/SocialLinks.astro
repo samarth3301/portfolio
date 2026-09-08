@@ -12,9 +12,9 @@ const { links } = Astro.props;
       rel="me noopener"
       target="_blank"
       aria-label={l.label}
-      class="grid size-[38px] place-items-center rounded-full no-underline transition duration-200 [&_svg]:opacity-70 [&_svg]:grayscale [&_svg]:transition-[filter,opacity] [&_svg]:duration-200 hover:-translate-y-0.5 hover:bg-panel hover:[&_svg]:opacity-100 hover:[&_svg]:grayscale-0"
+      class="grid size-[38px] place-items-center rounded-full text-muted no-underline transition duration-200 hover:-translate-y-0.5 hover:bg-panel hover:text-fg"
     >
-      <Icon {...l} label={l.label} size={18} />
+      <Icon {...l} label={l.label} size={20} />
     </a>
   ))}
 </nav>
