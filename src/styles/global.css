@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/* Theme is driven by a data attribute set before first paint, not a media
+   query, so the toggle can override the system preference. */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* Raw palette. Dark is the default; light overrides only what changes. */
+:root {
+  color-scheme: dark;
+  --bg: #08090c;
+  --panel: #0e1015;
+  --line: #1e222b;
+  --fg: #e7e9ee;
+  --muted: #8b93a3;
+  --accent: #f4f6fa;
+  --accent-dim: #3a4150;
+
+  /* Contribution graph ramp: the one place green is used. */
+  --l0: #14171d;
+  --l1: #124a2e;
+  --l2: #1c7a47;
+  --l3: #33ad64;
+  --l4: #6ee7a8;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fbfbfc;
+  --panel: #ffffff;
+  --line: #e5e7ec;
+  --fg: #14161b;
+  --muted: #656d7c;
+  --accent: #14161b;
+  --accent-dim: #c8ccd4;
+
+  --l0: #ebedf0;
+  --l1: #b7e4c7;
+  --l2: #6ecf95;
+  --l3: #2fa363;
+  --l4: #14713f;
+}
+
+/* `inline` emits var() references rather than copying values, so utilities
+   follow the palette above when the theme flips at runtime. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+
+  --color-l0: var(--l0);
+  --color-l1: var(--l1);
+  --color-l2: var(--l2);
+  --color-l3: var(--l3);
+  --color-l4: var(--l4);
+
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Repeated multi-property patterns, as real utilities rather than strings
+   copy-pasted across seventeen components. */
+@utility surface {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2xl);
+}
+
+@utility btn {
+  display: inline-block;
+  border-radius: calc(infinity * 1px);
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.55rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition-property: filter, background-color, transform;
+  transition-duration: 150ms;
+
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+}
+
+@utility btn-ghost {
+  background-color: transparent;
+  color: var(--color-accent);
+
+  &:hover {
+    background-color: color-mix(in oklab, var(--color-accent) 12%, transparent);
+    filter: none;
+  }
+}
+
+@utility tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-muted);
+  border: 1px solid var(--color-line);
+  border-radius: 5px;
+  padding: 0.12rem 0.45rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
