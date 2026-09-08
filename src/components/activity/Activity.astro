@@ -1,0 +1,10 @@
+---
+import ContributionGraph from "./ContributionGraph.astro";
+import type { Contributions } from "../../types";
+
+type Props = { contributions: Contributions };
+const { contributions } = Astro.props;
+---
+<div class="surface p-5">
+  <ContributionGraph days={contributions.days} total={contributions.total} />
+</div>

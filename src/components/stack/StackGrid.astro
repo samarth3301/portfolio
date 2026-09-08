@@ -1,0 +1,29 @@
+---
+import Icon from "../ui/Icon.astro";
+import type { StackItem, WithIcon } from "../../types";
+
+type Props = { groups: { group: string; items: WithIcon<StackItem>[] }[] };
+const { groups } = Astro.props;
+---
+<div class="grid gap-6">
+  {groups.map((g) => (
+    <div>
+      <h3 class="mb-3 text-center text-[0.7rem] font-medium uppercase tracking-[0.14em] text-muted">
+        {g.group}
+      </h3>
+      <ul class="m-0 flex list-none flex-wrap justify-center gap-3 p-0">
+        {g.items.map((item) => (
+          <li class="group grid justify-items-center gap-1.5">
+            {/* Reveals the real brand colour on hover; locally drawn icons have none. */}
+            <span
+              class="grid size-[46px] place-items-center rounded-xl border border-line bg-panel text-fg transition duration-150 sm:size-[52px] group-hover:-translate-y-0.5 group-hover:border-current group-hover:text-[var(--brand-d,var(--color-accent))] group-focus-within:-translate-y-0.5 group-focus-within:border-current group-focus-within:text-[var(--brand-d,var(--color-accent))] light:group-hover:text-[var(--brand-l,var(--color-accent))] light:group-focus-within:text-[var(--brand-l,var(--color-accent))]"
+            >
+              <Icon {...item} label={item.name} />
+            </span>
+            <span class="text-[0.68rem] text-muted">{item.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>

@@ -1,0 +1,13 @@
+---
+import Tags from "../ui/Tags.astro";
+import { services } from "../../data";
+---
+<div class="grid gap-3">
+  {services.map((s) => (
+    <article class="surface p-5">
+      <h3 class="mb-2 text-[1.02rem] font-semibold">{s.title}</h3>
+      <p class="mb-3 text-pretty text-[0.9rem] leading-relaxed text-muted">{s.body}</p>
+      <Tags items={s.tags} />
+    </article>
+  ))}
+</div>

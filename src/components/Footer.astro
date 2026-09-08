@@ -1,0 +1,14 @@
+---
+import CallToAction from "./ui/CallToAction.astro";
+import { closing, contact, name } from "../data";
+
+// Rolls over on its own each January rather than needing an edit.
+const year = new Date().getFullYear();
+---
+<footer class="mt-18 border-t border-line pt-8 text-center">
+  <p class="mx-auto max-w-lg text-pretty text-[0.95rem] leading-relaxed text-muted">
+    {closing}
+  </p>
+  <CallToAction emailLabel={contact.email} />
+  <p class="mt-7 text-xs text-muted">© {year} {name}. All rights reserved.</p>
+</footer>

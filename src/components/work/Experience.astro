@@ -1,0 +1,40 @@
+---
+import Tags from "../ui/Tags.astro";
+import { experience } from "../../data";
+---
+<ol class="grid list-none gap-9 p-0">
+  {experience.map((e) => (
+    <li
+      class="relative grid grid-cols-1 gap-4 border-l border-line pl-5 before:absolute before:-left-1 before:top-2 before:size-[7px] before:rounded-full before:bg-accent before:content-[''] sm:grid-cols-[10rem_1fr] sm:gap-5"
+    >
+      <div class="grid gap-0.5 sm:pt-0.5">
+        {e.url ? (
+          <a
+            href={e.url}
+            target="_blank"
+            rel="noopener"
+            class="text-[0.95rem] font-semibold text-fg no-underline hover:text-accent"
+          >
+            {e.org}
+          </a>
+        ) : (
+          <span class="text-[0.95rem] font-semibold text-fg">{e.org}</span>
+        )}
+        <span class="font-mono text-[0.7rem] font-normal text-muted">{e.period}</span>
+      </div>
+
+      <div class="grid gap-6">
+        {e.roles.map((r) => (
+          <div>
+            <h3 class="text-[0.98rem] font-semibold">{r.title}</h3>
+            <p class="mt-0.5 mb-2 font-mono text-xs text-muted">
+              {r.period}{r.location && <> · {r.location}</>}
+            </p>
+            <p class="mb-3 text-[0.9rem] leading-relaxed text-muted">{r.blurb}</p>
+            <Tags items={r.tags} />
+          </div>
+        ))}
+      </div>
+    </li>
+  ))}
+</ol>

@@ -1,0 +1,44 @@
+---
+import SocialLinks from "./SocialLinks.astro";
+import CallToAction from "../ui/CallToAction.astro";
+import { name, location, availability, pitch, subpitch } from "../../data";
+import type { SocialLink, WithIcon } from "../../types";
+
+type Props = { avatar: string; socials: WithIcon<SocialLink>[] };
+const { avatar, socials } = Astro.props;
+---
+<header>
+  <img
+    src={avatar}
+    alt={name}
+    width="88"
+    height="88"
+    loading="eager"
+    class="mx-auto size-[88px] rounded-full border border-line bg-panel object-cover"
+  />
+
+  <p class="mt-4 mb-2.5 text-[0.78rem] uppercase tracking-[0.12em] text-muted">
+    {name}
+  </p>
+
+  <h1
+    class="mx-auto max-w-[20ch] text-balance text-[clamp(1.9rem,5.5vw,2.7rem)] font-bold leading-[1.15] tracking-[-0.035em]"
+  >
+    {pitch}
+  </h1>
+
+  <p class="mx-auto mt-[1.1rem] max-w-xl text-pretty leading-relaxed text-muted">
+    {subpitch}
+  </p>
+
+  <p class="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm text-muted">
+    <span>{location}</span>
+    <span aria-hidden="true">·</span>
+    <span class="inline-flex items-center gap-1.5">
+      <i class="size-1.5 rounded-full bg-accent"></i>{availability}
+    </span>
+  </p>
+
+  <CallToAction />
+  <SocialLinks links={socials} />
+</header>

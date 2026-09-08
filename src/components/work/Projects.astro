@@ -1,0 +1,10 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import type { ResolvedProject } from "../../types";
+
+type Props = { projects: ResolvedProject[] };
+const { projects } = Astro.props;
+---
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+  {projects.map((project) => <ProjectCard project={project} />)}
+</div>

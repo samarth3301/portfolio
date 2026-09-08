@@ -1,0 +1,70 @@
+---
+import type { Day } from "../../types";
+
+type Props = { days: Day[]; total: number };
+const { days, total } = Astro.props;
+
+// Pad to a whole week so the grid columns line up with real weekdays.
+const lead = days.length ? new Date(days[0]!.date + "T00:00:00Z").getUTCDay() : 0;
+const cells: (Day | null)[] = [...Array(lead).fill(null), ...days];
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+// One label per column whose week contains the 1st of a month.
+const months: { col: number; name: string }[] = [];
+for (let i = 0; i < cells.length; i++) {
+  const d = cells[i];
+  if (!d) continue;
+  const day = new Date(d.date + "T00:00:00Z");
+  if (day.getUTCDate() <= 7) {
+    const col = Math.floor(i / 7) + 1;
+    const name = MONTHS[day.getUTCMonth()]!;
+    if (months.at(-1)?.name !== name) months.push({ col, name });
+  }
+}
+const weeks = Math.ceil(cells.length / 7);
+
+const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
+---
+
+<figure class="m-0" style={`--weeks:${weeks}`}>
+  <figcaption class="mb-3.5 text-[0.85rem] text-muted">
+    <strong class="font-semibold text-fg">{total.toLocaleString()}</strong>
+    contributions in the last year
+  </figcaption>
+
+  <!-- Fluid columns so all 53 weeks fit the container with no scrolling. The
+       gap shrinks with the viewport to keep narrow screens legible. -->
+  <div
+    class="mb-1.5 grid h-[1em] grid-cols-[repeat(var(--weeks),1fr)] gap-[clamp(1px,0.32vw,3px)] text-[0.68rem] leading-none text-muted"
+    aria-hidden="true"
+  >
+    {months.map((m) => (
+      <span class="whitespace-nowrap" style={`grid-column:${m.col}`}>{m.name}</span>
+    ))}
+  </div>
+
+  <!-- aspect-ratio on the container, not the cells: a cell sized only by
+       aspect-ratio collapses to zero height inside a grid track. -->
+  <div
+    class="grid aspect-[var(--weeks)/7] grid-flow-col grid-cols-[repeat(var(--weeks),1fr)] grid-rows-7 gap-[clamp(1px,0.32vw,3px)]"
+    role="img"
+    aria-label={`${total} GitHub contributions in the last year`}
+  >
+    {cells.map((d) =>
+      d ? (
+        <i
+          class:list={["min-w-0 rounded-[2px] transition duration-150 hover:scale-160", LEVELS[d.level]]}
+          title={`${d.count} contribution${d.count === 1 ? "" : "s"} on ${d.date}`}
+        ></i>
+      ) : (
+        <i class="min-w-0"></i>
+      ),
+    )}
+  </div>
+
+  <div class="mt-3.5 flex items-center justify-end gap-1 text-[0.7rem] text-muted">
+    <span class="mr-0.5">Less</span>
+    {LEVELS.map((bg) => <i class:list={["size-2.5 rounded-[2px]", bg]}></i>)}
+    <span class="ml-0.5">More</span>
+  </div>
+</figure>
