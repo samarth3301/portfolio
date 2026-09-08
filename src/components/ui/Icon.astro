@@ -5,7 +5,7 @@ type Props = Icon & { label: string; size?: number };
 const { svg, brandDark, brandLight, label, size = 22 } = Astro.props;
 ---
 <span
-  class="grid place-items-center [&_svg]:block [&_svg]:size-(--icon-size)"
+  class="grid place-items-center [&_svg]:block [&_svg]:w-[var(--icon-size)] [&_svg]:h-[var(--icon-size)]"
   title={label}
   style={[
     `--icon-size:${size}px`,
