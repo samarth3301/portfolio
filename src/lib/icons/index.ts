@@ -7,10 +7,15 @@ const EMPTY: Icon = { svg: null, svgLight: null };
 const memo = new Map<string, Icon>();
 
 /** Intrinsic size is dropped so CSS owns it; the label lives on the wrapper. */
-const normalize = (svg: string) =>
-  svg
+const normalize = (svg: string) => {
+  let cleaned = svg
     .replace(/<svg /, '<svg aria-hidden="true" ')
     .replace(/\s(?:width|height)="[^"]*"/g, "");
+  if (!cleaned.includes("fill=") && !cleaned.includes("stroke=")) {
+    cleaned = cleaned.replace(/<svg /, '<svg fill="currentColor" ');
+  }
+  return cleaned;
+};
 
 const fetchSvg = async (file: string) =>
   normalize(await cachedFetch(assetUrl(file)));
