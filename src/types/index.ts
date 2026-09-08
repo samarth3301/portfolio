@@ -45,8 +45,8 @@ export type SocialLink = { label: string; href: string; icon: string };
 
 export type Icon = {
   svg: string | null;
-  brandDark: string | null;
-  brandLight: string | null;
+  /** Only set for logos that need a different drawing on light backgrounds. */
+  svgLight: string | null;
 };
 
 /** A stack item or social link with its resolved icon. */

@@ -2,17 +2,23 @@
 import type { Icon } from "../../types";
 
 type Props = Icon & { label: string; size?: number };
-const { svg, brandDark, brandLight, label, size = 22 } = Astro.props;
+const { svg, svgLight, label, size = 22 } = Astro.props;
 ---
 <span
   class="grid place-items-center [&_svg]:block [&_svg]:w-[var(--icon-size)] [&_svg]:h-[var(--icon-size)]"
   title={label}
-  style={[
-    `--icon-size:${size}px`,
-    brandDark && `--brand-d:${brandDark};--brand-l:${brandLight}`,
-  ]
-    .filter(Boolean)
-    .join(";")}
+  style={`--icon-size:${size}px`}
 >
-  {svg ? <Fragment set:html={svg} /> : <b class="text-base font-semibold">{label[0]}</b>}
+  {svg ? (
+    <>
+      <span class:list={["grid", svgLight && "light:hidden"]}>
+        <Fragment set:html={svg} />
+      </span>
+      {svgLight && (
+        <span class="hidden light:grid"><Fragment set:html={svgLight} /></span>
+      )}
+    </>
+  ) : (
+    <b class="text-base font-semibold">{label[0]}</b>
+  )}
 </span>

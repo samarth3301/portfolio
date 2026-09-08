@@ -14,9 +14,9 @@ const { groups } = Astro.props;
       <ul class="m-0 flex list-none flex-wrap justify-center gap-3 p-0">
         {g.items.map((item) => (
           <li class="group grid justify-items-center gap-1.5">
-            {/* Reveals the real brand colour on hover; locally drawn icons have none. */}
+            {/* Desaturated at rest so the grid reads as one block; hover restores the brand colour. */}
             <span
-              class="grid size-[46px] place-items-center rounded-xl border border-line bg-panel text-fg transition duration-150 sm:size-[52px] group-hover:-translate-y-0.5 group-hover:border-current group-hover:text-[var(--brand-d,var(--color-accent))] group-focus-within:-translate-y-0.5 group-focus-within:border-current group-focus-within:text-[var(--brand-d,var(--color-accent))] light:group-hover:text-[var(--brand-l,var(--color-accent))] light:group-focus-within:text-[var(--brand-l,var(--color-accent))]"
+              class="grid size-[46px] place-items-center rounded-xl border border-line bg-panel transition duration-200 [&_svg]:opacity-70 [&_svg]:grayscale [&_svg]:transition-[filter,opacity] [&_svg]:duration-200 sm:size-[52px] group-hover:-translate-y-0.5 group-hover:border-accent-dim group-hover:[&_svg]:opacity-100 group-hover:[&_svg]:grayscale-0 group-focus-within:-translate-y-0.5 group-focus-within:border-accent-dim group-focus-within:[&_svg]:opacity-100 group-focus-within:[&_svg]:grayscale-0"
             >
               <Icon {...item} label={item.name} />
             </span>

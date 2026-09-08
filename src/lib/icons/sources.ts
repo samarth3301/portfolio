@@ -1,14 +1,31 @@
 /**
- * simple-icons removed LinkedIn on brand request; pin the last version that
- * shipped it. Anything not listed here comes from the current set.
+ * Logos come from svgl.app, keyed by the slug used in src/data. A pair means
+ * the logo is drawn in near-black and needs a lighter variant on dark themes.
  */
-export const PINNED: Record<string, string> = {
-  linkedin: "https://cdn.jsdelivr.net/npm/simple-icons@11/icons/linkedin.svg",
+type Source = string | { light: string; dark: string };
+
+export const SVGL: Record<string, Source> = {
+  typescript: "typescript",
+  python: "python",
+  go: { light: "golang", dark: "golang_dark" },
+  openjdk: "java",
+  cplusplus: "c-plusplus",
+  solidity: "solidity",
+  nodedotjs: "nodejs",
+  express: { light: "expressjs", dark: "expressjs_dark" },
+  fastify: { light: "fastify", dark: "fastify_dark" },
+  django: "django",
+  springboot: "spring",
+  graphql: "graphql",
+  postgresql: "postgresql",
+  redis: "redis",
+  docker: "docker",
+  nginx: "nginx",
+  linux: "linux",
+  git: "git",
+  github: { light: "github_light", dark: "github_dark" },
+  linkedin: "linkedin",
+  x: { light: "x", dark: "x_dark" },
 };
 
-/** Not brands, so drawn here rather than borrowing a browser's logo. */
-export const LOCAL: Record<string, string> = {
-  globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><ellipse cx="12" cy="12" rx="4" ry="9.2"/><path d="M3.2 9h17.6M3.2 15h17.6"/></svg>`,
-};
-
-export const cdnUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}`;
+export const assetUrl = (file: string) => `https://svgl.app/library/${file}.svg`;
