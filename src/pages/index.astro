@@ -1,11 +1,45 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/hero/Hero.astro";
+import Section from "../components/ui/Section.astro";
+import Services from "../components/work/Services.astro";
+import Projects from "../components/work/Projects.astro";
+import Experience from "../components/work/Experience.astro";
+import TopSkills from "../components/stack/TopSkills.astro";
+import StackGrid from "../components/stack/StackGrid.astro";
+import Activity from "../components/activity/Activity.astro";
+import Footer from "../components/Footer.astro";
+import { loadContent } from "../lib/content";
+import { name, role, subpitch } from "../data";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const { profile, contributions, work, stackGroups, socials } = await loadContent();
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={`${name} | ${role}`} description={subpitch}>
+  <main class="mx-auto max-w-3xl px-5 pb-16 pt-[clamp(3.5rem,10vw,6.5rem)] text-center">
+    <Hero avatar={profile.avatar_url} socials={socials} />
+
+    <Section id="services" title="What I do">
+      <Services />
+    </Section>
+
+    <Section id="work" title="Selected work">
+      <Projects projects={work} />
+    </Section>
+
+    <Section id="experience" title="Experience">
+      <Experience />
+    </Section>
+
+    <Section id="stack" title="Stack" center>
+      <TopSkills />
+      <StackGrid groups={stackGroups} />
+    </Section>
+
+    <Section id="activity" title="Still shipping">
+      <Activity contributions={contributions} />
+    </Section>
+
+    <Footer />
+  </main>
 </Layout>
