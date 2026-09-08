@@ -1,6 +1,7 @@
 ---
 import ThemeScript from "../components/theme/ThemeScript.astro";
 import ThemeToggle from "../components/theme/ThemeToggle.astro";
+import Reveal from "../components/ui/Reveal.astro";
 import "../styles/global.css";
 
 type Props = { title: string; description: string };
@@ -25,6 +26,7 @@ const { title, description } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <ThemeScript />
+    <Reveal />
   </head>
   <body>
     <ThemeToggle />
