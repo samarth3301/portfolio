@@ -24,13 +24,27 @@ for (let i = 0; i < cells.length; i++) {
 const weeks = Math.ceil(cells.length / 7);
 
 const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
+
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00Z");
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
 ---
 
-<figure class="m-0" style={`--weeks:${weeks}`}>
+<figure class="m-0 relative group/contrib" style={`--weeks:${weeks}`}>
   <figcaption class="mb-3.5 text-[0.85rem] text-muted">
     <strong class="font-semibold text-fg">{total.toLocaleString()}</strong>
     contributions in the last year
   </figcaption>
+
+  <!-- Tooltip element -->
+  <div
+    id="contrib-tooltip"
+    class="pointer-events-none fixed z-50 hidden rounded-md bg-panel border border-line px-2.5 py-1 text-xs text-fg shadow-lg transition-opacity duration-150 whitespace-nowrap"
+    role="tooltip"
+  >
+    <span id="contrib-tooltip-text" class="font-medium"></span>
+  </div>
 
   <!-- Narrow screens scroll horizontally at a legible fixed cell size; from
        sm up the whole year fits the container with fluid columns. -->
@@ -48,6 +62,7 @@ const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
   <!-- aspect-ratio on the container, not the cells: a cell sized only by
        aspect-ratio collapses to zero height inside a grid track. -->
   <div
+    id="contrib-grid"
     class="grid aspect-[var(--weeks)/7] grid-flow-col grid-cols-[repeat(var(--weeks),1fr)] grid-rows-7 gap-[clamp(1px,0.32vw,3px)]"
     role="img"
     aria-label={`${total} GitHub contributions in the last year`}
@@ -55,8 +70,10 @@ const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
     {cells.map((d) =>
       d ? (
         <i
-          class:list={["min-w-0 rounded-[2px] transition duration-150 hover:scale-160", LEVELS[d.level]]}
-          title={`${d.count} contribution${d.count === 1 ? "" : "s"} on ${d.date}`}
+          class:list={["contrib-cell min-w-0 rounded-[2px] transition duration-150 hover:scale-160 cursor-pointer", LEVELS[d.level]]}
+          data-count={d.count}
+          data-date={formatDate(d.date)}
+          title={`${d.count} contribution${d.count === 1 ? "" : "s"} on ${formatDate(d.date)}`}
         ></i>
       ) : (
         <i class="min-w-0"></i>
@@ -72,3 +89,41 @@ const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
     <span class="ml-0.5">More</span>
   </div>
 </figure>
+
+<script>
+  const tooltip = document.getElementById("contrib-tooltip");
+  const tooltipText = document.getElementById("contrib-tooltip-text");
+  const grid = document.getElementById("contrib-grid");
+
+  if (tooltip && tooltipText && grid) {
+    grid.addEventListener("mouseover", (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains("contrib-cell")) {
+        const count = target.getAttribute("data-count");
+        const date = target.getAttribute("data-date");
+        if (count !== null && date) {
+          const countText = count === "0" ? "No contributions" : `${count} contribution${count === "1" ? "" : "s"}`;
+          tooltipText.textContent = `${countText} on ${date}`;
+          tooltip.classList.remove("hidden");
+        }
+      }
+    });
+
+    grid.addEventListener("mousemove", (e) => {
+      if (!tooltip.classList.contains("hidden")) {
+        const x = e.clientX;
+        const y = e.clientY;
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y - 36}px`;
+        tooltip.style.transform = "translateX(-50%)";
+      }
+    });
+
+    grid.addEventListener("mouseout", (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains("contrib-cell")) {
+        tooltip.classList.add("hidden");
+      }
+    });
+  }
+</script>
