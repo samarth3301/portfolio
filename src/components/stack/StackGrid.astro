@@ -5,7 +5,7 @@ import type { StackItem, WithIcon } from "../../types";
 type Props = { groups: { group: string; items: WithIcon<StackItem>[] }[] };
 const { groups } = Astro.props;
 ---
-<div class="grid gap-6">
+<div data-reveal-group class="grid gap-6">
   {groups.map((g) => (
     <div>
       <h3 class="mb-3 text-center text-[0.7rem] font-medium uppercase tracking-[0.14em] text-muted">

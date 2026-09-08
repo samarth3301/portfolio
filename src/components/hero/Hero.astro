@@ -7,7 +7,7 @@ import type { SocialLink, WithIcon } from "../../types";
 type Props = { avatar: string; socials: WithIcon<SocialLink>[] };
 const { avatar, socials } = Astro.props;
 ---
-<header>
+<header data-reveal-group>
   <img
     src={avatar}
     alt={name}

@@ -32,8 +32,10 @@ const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
     contributions in the last year
   </figcaption>
 
-  <!-- Fluid columns so all 53 weeks fit the container with no scrolling. The
-       gap shrinks with the viewport to keep narrow screens legible. -->
+  <!-- Narrow screens scroll horizontally at a legible fixed cell size; from
+       sm up the whole year fits the container with fluid columns. -->
+  <div class="-mx-1 overflow-x-auto px-1 sm:mx-0 sm:overflow-x-visible sm:px-0">
+  <div class="min-w-[calc(var(--weeks)*11px)] sm:min-w-0">
   <div
     class="mb-1.5 grid h-[1em] grid-cols-[repeat(var(--weeks),1fr)] gap-[clamp(1px,0.32vw,3px)] text-[0.68rem] leading-none text-muted"
     aria-hidden="true"
@@ -60,6 +62,8 @@ const LEVELS = ["bg-l0", "bg-l1", "bg-l2", "bg-l3", "bg-l4"];
         <i class="min-w-0"></i>
       ),
     )}
+  </div>
+  </div>
   </div>
 
   <div class="mt-3.5 flex items-center justify-end gap-1 text-[0.7rem] text-muted">

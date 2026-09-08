@@ -2,7 +2,7 @@
 import Tags from "../ui/Tags.astro";
 import { experience } from "../../data";
 ---
-<ol class="grid list-none gap-9 p-0">
+<ol data-reveal-group class="grid list-none gap-9 p-0">
   {experience.map((e) => (
     <li
       class="relative grid grid-cols-1 gap-4 border-l border-line pl-5 before:absolute before:-left-1 before:top-2 before:size-[7px] before:rounded-full before:bg-accent before:content-[''] sm:grid-cols-[10rem_1fr] sm:gap-5"

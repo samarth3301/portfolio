@@ -8,9 +8,12 @@ const { title, id, center = false } = Astro.props;
 >
   <h2
     id={id}
+    data-reveal
     class="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted"
   >
     {title}
   </h2>
-  <slot />
+  <div data-reveal style="--i: 1">
+    <slot />
+  </div>
 </section>
