@@ -3,6 +3,7 @@
 /* Theme is driven by a data attribute set before first paint, not a media
    query, so the toggle can override the system preference. */
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* Raw palette. Dark is the default; light overrides only what changes. */
 :root {
