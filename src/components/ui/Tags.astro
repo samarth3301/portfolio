@@ -1,0 +1,7 @@
+---
+type Props = { items: string[] };
+const { items } = Astro.props;
+---
+<div class="flex flex-wrap gap-1.5">
+  {items.map((t) => <span class="tag">{t}</span>)}
+</div>

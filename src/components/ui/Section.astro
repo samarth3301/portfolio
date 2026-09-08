@@ -1,0 +1,16 @@
+---
+type Props = { title: string; id: string; center?: boolean };
+const { title, id, center = false } = Astro.props;
+---
+<section
+  aria-labelledby={id}
+  class:list={["mt-[clamp(3.5rem,9vw,5rem)]", center ? "text-center" : "text-left"]}
+>
+  <h2
+    id={id}
+    class="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted"
+  >
+    {title}
+  </h2>
+  <slot />
+</section>

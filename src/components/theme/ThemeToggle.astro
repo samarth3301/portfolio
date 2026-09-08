@@ -1,0 +1,46 @@
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Switch theme"
+  class="fixed right-4 top-4 z-30 grid size-9 cursor-pointer place-items-center rounded-[10px] border border-line bg-panel p-0 text-muted transition duration-150 hover:border-accent hover:text-accent [&>svg]:col-start-1 [&>svg]:row-start-1 [&>svg]:fill-none [&>svg]:stroke-current [&>svg]:stroke-[1.7] [&>svg]:[stroke-linejoin:round]"
+>
+  <!-- Shows the icon for the theme you'd switch TO. -->
+  <svg class="sun light:hidden" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+    <circle cx="12" cy="12" r="4.2" />
+    <g stroke-width="2" stroke-linecap="round">
+      <path d="M12 1.8v2.6M12 19.6v2.6M4.2 12H1.6M22.4 12h-2.6M6.5 6.5 4.6 4.6M19.4 19.4l-1.9-1.9M17.5 6.5l1.9-1.9M4.6 19.4l1.9-1.9" />
+    </g>
+  </svg>
+  <svg
+    class="moon hidden fill-current stroke-none! light:block"
+    viewBox="0 0 24 24"
+    width="16"
+    height="16"
+    aria-hidden="true"
+  >
+    <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z" />
+  </svg>
+</button>
+
+<script is:inline>
+  {
+    const btn = document.getElementById("theme-toggle");
+    const root = document.documentElement;
+    const sync = () =>
+      btn.setAttribute(
+        "aria-label",
+        root.dataset.theme === "dark"
+          ? "Switch to light theme"
+          : "Switch to dark theme",
+      );
+    btn.addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem("theme", next);
+      } catch {}
+      sync();
+    });
+    sync();
+  }
+</script>
