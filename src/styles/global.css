@@ -5,19 +5,28 @@
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Raw palette. Dark is the default; light overrides only what changes. */
+/* Raw palette, shadcn's zinc scale. Dark is the default; light overrides
+   only what changes. Monochrome on purpose: the only hue on the page is
+   the contribution ramp. */
 :root {
   color-scheme: dark;
-  --bg: #08090c;
-  --panel: #0e1015;
-  --line: #1e222b;
-  --fg: #e7e9ee;
-  --muted: #8b93a3;
-  --accent: #f4f6fa;
-  --accent-dim: #3a4150;
+  --bg: #09090b;
+  --panel: #101013;
+  --panel-hover: #17171b;
+  --line: #232327;
+  --line-strong: #34343a;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --faint: #71717a;
+  --accent: #fafafa;
+  --accent-dim: #3f3f46;
+  --ring: #52525b;
 
-  /* Contribution graph ramp: the one place green is used. */
-  --l0: #14171d;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 8px 24px -12px rgb(0 0 0 / 0.7);
+
+  /* Contribution graph ramp: the one place colour is used. */
+  --l0: #17171b;
   --l1: #124a2e;
   --l2: #1c7a47;
   --l3: #33ad64;
@@ -26,13 +35,20 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #fbfbfc;
-  --panel: #ffffff;
-  --line: #e5e7ec;
-  --fg: #14161b;
-  --muted: #656d7c;
-  --accent: #14161b;
-  --accent-dim: #c8ccd4;
+  --bg: #ffffff;
+  --panel: #fafafa;
+  --panel-hover: #f4f4f5;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --fg: #09090b;
+  --muted: #52525b;
+  --faint: #71717a;
+  --accent: #09090b;
+  --accent-dim: #d4d4d8;
+  --ring: #a1a1aa;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-lift: 0 8px 24px -12px rgb(0 0 0 / 0.18);
 
   --l0: #ebedf0;
   --l1: #b7e4c7;
@@ -46,11 +62,15 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-panel: var(--panel);
+  --color-panel-hover: var(--panel-hover);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-accent: var(--accent);
   --color-accent-dim: var(--accent-dim);
+  --color-ring: var(--ring);
 
   --color-l0: var(--l0);
   --color-l1: var(--l1);
@@ -60,52 +80,109 @@
 
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* One radius knob, everything else derives from it. */
+  --radius-card: 0.75rem;
+  --radius-control: 0.5rem;
+
+  /* A real type scale. Five sizes, not five accidents one hundredth of a
+     rem apart. */
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.45;
+  --text-meta: 0.78125rem;
+  --text-meta--line-height: 1.5;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.65;
+  --text-lead: 1.0625rem;
+  --text-lead--line-height: 1.6;
+
+  /* Vertical rhythm between top-level sections. */
+  --spacing-section: clamp(4rem, 10vw, 6.5rem);
 }
 
 /* Repeated multi-property patterns, as real utilities rather than strings
    copy-pasted across seventeen components. */
-@utility surface {
+@utility card {
   background-color: var(--color-panel);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Cards that respond to the pointer. Split from `card` so static panels
+   don't pay for hover state they never enter. */
+@utility card-interactive {
+  transition-property: border-color, background-color, box-shadow, transform;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    border-color: var(--color-line-strong);
+    background-color: var(--color-panel-hover);
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+  }
 }
 
 @utility btn {
-  display: inline-block;
-  border-radius: calc(infinity * 1px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-control);
   border: 1px solid var(--color-accent);
   background-color: var(--color-accent);
   color: var(--color-bg);
-  padding: 0.55rem 1.35rem;
-  font-size: 0.9rem;
+  padding: 0.55rem 1.1rem;
+  font-size: var(--text-meta);
   font-weight: 500;
+  line-height: 1.2;
   text-decoration: none;
-  transition-property: filter, background-color, transform;
+  white-space: nowrap;
+  transition-property: filter, background-color, border-color, color;
   transition-duration: 150ms;
 
   &:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
+    filter: brightness(0.92);
   }
 }
 
 @utility btn-ghost {
+  border-color: var(--color-line);
   background-color: transparent;
-  color: var(--color-accent);
+  color: var(--color-fg);
 
   &:hover {
-    background-color: color-mix(in oklab, var(--color-accent) 12%, transparent);
+    border-color: var(--color-line-strong);
+    background-color: var(--color-panel);
     filter: none;
   }
 }
 
-@utility tag {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--color-muted);
+/* shadcn's badge, minus the React. */
+@utility badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: calc(infinity * 1px);
   border: 1px solid var(--color-line);
-  border-radius: 5px;
-  padding: 0.12rem 0.45rem;
+  background-color: var(--color-panel);
+  padding: 0.2rem 0.6rem;
+  font-size: var(--text-micro);
+  line-height: 1.4;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+@utility tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: 1.4;
+  color: var(--color-faint);
+  border: 1px solid var(--color-line);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.4rem;
 }
 
 @layer base {
@@ -117,16 +194,25 @@
     background-color: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-sans);
+    font-size: var(--text-body);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Anchored sections clear the sticky header instead of hiding under it. */
+  :target,
+  [id] {
+    scroll-margin-top: 5rem;
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    background-color: color-mix(in oklab, var(--color-accent) 22%, transparent);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
+    border-radius: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -138,6 +224,42 @@
     *::after {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Now-playing equaliser. The bars sit at a resting height and only animate
+   while a track is actually playing. */
+@layer base {
+  [data-np-bars] i {
+    height: 30%;
+    transition: height 200ms ease;
+  }
+
+  [data-np-bars].is-playing i {
+    background-color: var(--color-fg);
+    animation: np-bar 900ms ease-in-out infinite;
+  }
+
+  [data-np-bars].is-playing i:nth-child(2) {
+    animation-duration: 1150ms;
+    animation-delay: -300ms;
+  }
+
+  [data-np-bars].is-playing i:nth-child(3) {
+    animation-duration: 780ms;
+    animation-delay: -600ms;
+  }
+
+  @keyframes np-bar {
+    0%, 100% { height: 25%; }
+    50% { height: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-np-bars].is-playing i {
+      animation: none;
+      height: 60%;
     }
   }
 }
