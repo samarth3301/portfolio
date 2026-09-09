@@ -1,10 +1,8 @@
 ---
 import { topSkills } from "../../data";
 ---
-<ul class="m-0 mb-7 flex list-none flex-wrap justify-center gap-2 p-0">
+<ul class="m-0 mb-8 flex list-none flex-wrap gap-2 p-0">
   {topSkills.map((s) => (
-    <li class="rounded-full border border-accent-dim px-3 py-1 text-[0.78rem] text-accent">
-      {s}
-    </li>
+    <li class="badge border-line-strong px-3 py-1 text-meta text-fg">{s}</li>
   ))}
 </ul>

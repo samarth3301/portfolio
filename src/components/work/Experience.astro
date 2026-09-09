@@ -1,39 +1,51 @@
 ---
 import Tags from "../ui/Tags.astro";
 import { experience } from "../../data";
----
-<ol data-reveal-group class="grid list-none gap-9 p-0">
-  {experience.map((e) => (
-    <li
-      class="relative grid grid-cols-1 gap-4 border-l border-line pl-5 before:absolute before:-left-1 before:top-2 before:size-[7px] before:rounded-full before:bg-accent before:content-[''] sm:grid-cols-[10rem_1fr] sm:gap-5"
-    >
-      <div class="grid gap-0.5 sm:pt-0.5">
-        {e.url ? (
-          <a
-            href={e.url}
-            target="_blank"
-            rel="noopener"
-            class="text-[0.95rem] font-semibold text-fg no-underline hover:text-accent"
-          >
-            {e.org}
-          </a>
-        ) : (
-          <span class="text-[0.95rem] font-semibold text-fg">{e.org}</span>
-        )}
-        <span class="font-mono text-[0.7rem] font-normal text-muted">{e.period}</span>
-      </div>
 
-      <div class="grid gap-6">
-        {e.roles.map((r) => (
-          <div>
-            <h3 class="text-[0.98rem] font-semibold">{r.title}</h3>
-            <p class="mt-0.5 mb-2 font-mono text-xs text-muted">
-              {r.period}{r.location && <> · {r.location}</>}
-            </p>
-            <p class="mb-3 text-[0.9rem] leading-relaxed text-muted">{r.blurb}</p>
-            <Tags items={r.tags} />
-          </div>
-        ))}
+// Flattened to one row per role: the employer name rides on the title line,
+// so every row can share the gutter and right-align its own dates.
+const roles = experience.flatMap((e) =>
+  e.roles.map((r) => ({ ...r, org: e.org, url: e.url })),
+);
+---
+<ol data-reveal-group class="relative m-0 grid list-none gap-9 p-0">
+  <!-- One rail through every dot, inset to the dot's centre. -->
+  <span aria-hidden="true" class="absolute bottom-2 left-2 top-2 w-px bg-line"></span>
+
+  {roles.map((r) => (
+    <li class="relative grid grid-cols-[2rem_1fr]">
+      <span
+        aria-hidden="true"
+        class="absolute left-[0.28rem] top-[0.38rem] size-[9px] rounded-full border border-line-strong bg-bg"
+      ></span>
+
+      <div class="col-start-2">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h3 class="text-body font-semibold">
+            {r.title}{" "}
+            <span class="font-normal text-muted">
+              · {r.url ? (
+                <a
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-muted no-underline underline-offset-4 hover:text-fg hover:underline"
+                >
+                  {r.org}
+                </a>
+              ) : (
+                r.org
+              )}
+            </span>
+          </h3>
+          <span class="font-mono text-micro whitespace-nowrap text-faint">{r.period}</span>
+        </div>
+
+        {r.location && <p class="mt-1 text-meta text-faint">{r.location}</p>}
+
+        <p class="mt-3 mb-3.5 max-w-[70ch] text-pretty text-body text-muted">{r.blurb}</p>
+
+        <Tags items={r.tags} />
       </div>
     </li>
   ))}

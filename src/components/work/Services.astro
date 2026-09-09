@@ -2,12 +2,29 @@
 import Tags from "../ui/Tags.astro";
 import { services } from "../../data";
 ---
-<div data-reveal-group class="grid gap-3">
-  {services.map((s) => (
-    <article class="surface p-5">
-      <h3 class="mb-2 text-[1.02rem] font-semibold">{s.title}</h3>
-      <p class="mb-3 text-pretty text-[0.9rem] leading-relaxed text-muted">{s.body}</p>
-      <Tags items={s.tags} />
-    </article>
-  ))}
+
+<!-- Same gutter and marker as the experience rail, so the two sections read
+     as one system rather than two unrelated lists. -->
+<div data-reveal-group class="relative grid gap-9">
+    <span
+        aria-hidden="true"
+        class="absolute bottom-2 left-2 top-2 w-px bg-line"
+    ></span>
+
+    {services.map((s) => (
+        <article class="relative grid grid-cols-[2rem_1fr]">
+            <span
+                aria-hidden="true"
+                class="absolute left-[0.28rem] top-[0.38rem] size-[9px] rounded-full border border-line-strong bg-bg"
+            ></span>
+
+            <div class="col-start-2">
+                <h3 class="text-body font-semibold">{s.title}</h3>
+                <p class="mt-3 mb-3.5 max-w-[70ch] text-pretty text-body text-muted">
+                    {s.body}
+                </p>
+                <Tags items={s.tags} />
+            </div>
+        </article>
+    ))}
 </div>

@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Banner from "../components/hero/Banner.astro";
 import Hero from "../components/hero/Hero.astro";
+import IndexRail from "../components/nav/IndexRail.astro";
 import Section from "../components/ui/Section.astro";
 import Services from "../components/work/Services.astro";
 import Projects from "../components/work/Projects.astro";
@@ -10,36 +12,59 @@ import StackGrid from "../components/stack/StackGrid.astro";
 import Activity from "../components/activity/Activity.astro";
 import Footer from "../components/Footer.astro";
 import { loadContent } from "../lib/content";
+import avatar from "../assets/me.jpeg";
 import { name, role, subpitch } from "../data";
 
-const { profile, contributions, work, stackGroups, socials } = await loadContent();
+const { contributions, work, stackGroups, socials } = await loadContent();
+
+// Single source for the section headings, their numbering and the sticky
+// rail, so the three can't drift apart. `short` keeps the rail to one line.
+const sections = [
+  { id: "services", title: "What I do", short: "Services" },
+  { id: "work", title: "Selected work", short: "Work" },
+  { id: "experience", title: "Experience", short: "Experience" },
+  { id: "stack", title: "Stack", short: "Stack" },
+  { id: "activity", title: "Still shipping", short: "Activity" },
+];
+const n = (id: string) => sections.findIndex((s) => s.id === id) + 1;
+const meta = (id: string) => sections.find((s) => s.id === id)!;
 ---
 
 <Layout title={`${name} | ${role}`} description={subpitch}>
-  <main class="mx-auto max-w-3xl px-5 pb-16 pt-[clamp(3.5rem,10vw,6.5rem)] text-center">
-    <Hero avatar={profile.avatar_url} socials={socials} />
+  <!-- One centred column. The rail is fixed to the viewport edge and takes
+       no space here, so the content stays optically centred. -->
+  <div class="mx-auto max-w-3xl px-6 pb-24">
+    <div class="mb-16">
+      <Banner />
+    </div>
 
-    <Section id="services" title="What I do">
-      <Services />
-    </Section>
+    <main class="min-w-0">
+      <Hero avatar={avatar} socials={socials} />
 
-    <Section id="work" title="Selected work">
-      <Projects projects={work} />
-    </Section>
+      <Section id="services" index={n("services")} title={meta("services").title}>
+        <Services />
+      </Section>
 
-    <Section id="experience" title="Experience">
-      <Experience />
-    </Section>
+      <Section id="work" index={n("work")} title={meta("work").title}>
+        <Projects projects={work} />
+      </Section>
 
-    <Section id="stack" title="Stack" center>
-      <TopSkills />
-      <StackGrid groups={stackGroups} />
-    </Section>
+      <Section id="experience" index={n("experience")} title={meta("experience").title}>
+        <Experience />
+      </Section>
 
-    <Section id="activity" title="Still shipping">
-      <Activity contributions={contributions} />
-    </Section>
+      <Section id="stack" index={n("stack")} title={meta("stack").title}>
+        <TopSkills />
+        <StackGrid groups={stackGroups} />
+      </Section>
 
-    <Footer />
-  </main>
+      <Section id="activity" index={n("activity")} title={meta("activity").title}>
+        <Activity contributions={contributions} />
+      </Section>
+
+      <Footer />
+    </main>
+
+    <IndexRail sections={sections.map((s) => ({ id: s.id, label: s.short }))} />
+  </div>
 </Layout>

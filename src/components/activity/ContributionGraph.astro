@@ -32,7 +32,7 @@ function formatDate(dateStr: string) {
 ---
 
 <figure class="m-0 relative group/contrib" style={`--weeks:${weeks}`}>
-  <figcaption class="mb-3.5 text-[0.85rem] text-muted">
+  <figcaption class="mb-4 text-meta text-muted">
     <strong class="font-semibold text-fg">{total.toLocaleString()}</strong>
     contributions in the last year
   </figcaption>
@@ -83,7 +83,7 @@ function formatDate(dateStr: string) {
   </div>
   </div>
 
-  <div class="mt-3.5 flex items-center justify-end gap-1 text-[0.7rem] text-muted">
+  <div class="mt-4 flex items-center justify-end gap-1 text-micro text-faint">
     <span class="mr-0.5">Less</span>
     {LEVELS.map((bg) => <i class:list={["size-2.5 rounded-[2px]", bg]}></i>)}
     <span class="ml-0.5">More</span>

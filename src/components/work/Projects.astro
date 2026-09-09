@@ -5,6 +5,6 @@ import type { ResolvedProject } from "../../types";
 type Props = { projects: ResolvedProject[] };
 const { projects } = Astro.props;
 ---
-<div data-reveal-group class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+<div data-reveal-group class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
   {projects.map((project) => <ProjectCard project={project} />)}
 </div>

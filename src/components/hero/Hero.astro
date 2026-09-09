@@ -1,44 +1,49 @@
 ---
+import { Image } from "astro:assets";
 import SocialLinks from "./SocialLinks.astro";
 import CallToAction from "../ui/CallToAction.astro";
-import { name, location, availability, pitch, subpitch } from "../../data";
+import { name, role, location, availability, subpitch } from "../../data";
 import type { SocialLink, WithIcon } from "../../types";
 
-type Props = { avatar: string; socials: WithIcon<SocialLink>[] };
+type Props = { avatar: ImageMetadata; socials: WithIcon<SocialLink>[] };
 const { avatar, socials } = Astro.props;
 ---
 <header data-reveal-group>
-  <img
-    src={avatar}
-    alt={name}
-    width="88"
-    height="88"
-    loading="eager"
-    class="mx-auto size-[88px] rounded-full border border-line bg-panel object-cover"
-  />
+  <div class="flex items-center gap-4">
+    <!-- Sized at 2x the rendered box for retina, height left to the source
+         aspect ratio and cropped square by object-cover. Astro resizes and
+         re-encodes at build time so the 1.4MB original never ships. -->
+    <Image
+      src={avatar}
+      alt={name}
+      width={144}
+      loading="eager"
+      class="size-[72px] shrink-0 rounded-full border border-line bg-panel object-cover"
+    />
+    <div class="min-w-0">
+      <h1 class="text-[clamp(1.75rem,5vw,2.4rem)] font-bold leading-[1.1] tracking-[-0.035em]">
+        {name}
+      </h1>
+      <p class="mt-1 text-body text-muted">{role}</p>
+    </div>
+  </div>
 
-  <p class="mt-4 mb-2.5 text-[0.78rem] uppercase tracking-[0.12em] text-muted">
-    {name}
-  </p>
-
-  <h1
-    class="mx-auto max-w-[20ch] text-balance text-[clamp(1.9rem,5.5vw,2.7rem)] font-bold leading-[1.15] tracking-[-0.035em]"
-  >
-    {pitch}
-  </h1>
-
-  <p class="mx-auto mt-[1.1rem] max-w-xl text-pretty leading-relaxed text-muted">
+  <p class="mt-7 max-w-[70ch] text-pretty text-body text-muted">
     {subpitch}
   </p>
 
-  <p class="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm text-muted">
-    <span>{location}</span>
-    <span aria-hidden="true">·</span>
-    <span class="inline-flex items-center gap-1.5">
-      <i class="size-1.5 rounded-full bg-accent"></i>{availability}
+  <div class="mt-5 flex flex-wrap items-center gap-2">
+    <span class="badge">{location}</span>
+    <span class="badge">
+      <!-- Ping ring plus a solid core, so the dot reads as a live signal. -->
+      <span class="relative grid size-1.5 place-items-center">
+        <span class="absolute size-1.5 animate-ping rounded-full bg-fg opacity-70"></span>
+        <span class="size-1.5 rounded-full bg-fg"></span>
+      </span>
+      {availability}
     </span>
-  </p>
+  </div>
 
-  <CallToAction />
   <SocialLinks links={socials} />
+  <CallToAction />
 </header>

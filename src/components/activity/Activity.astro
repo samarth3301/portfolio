@@ -1,10 +1,20 @@
 ---
 import ContributionGraph from "./ContributionGraph.astro";
+import NowPlaying from "../music/NowPlaying.astro";
 import type { Contributions } from "../../types";
 
 type Props = { contributions: Contributions };
 const { contributions } = Astro.props;
 ---
-<div class="surface p-5">
-  <ContributionGraph days={contributions.days} total={contributions.total} />
+<!-- Two live signals in one card: what I've been building, and what is
+     playing right now. The card is split into padded blocks rather than one
+     padded box so the divider between them can run edge to edge without any
+     negative-margin arithmetic. overflow-hidden keeps the now-playing hover
+     state inside the card's radius. -->
+<div class="card overflow-hidden">
+  <div class="p-5 sm:p-6">
+    <ContributionGraph days={contributions.days} total={contributions.total} />
+  </div>
+
+  <NowPlaying />
 </div>
