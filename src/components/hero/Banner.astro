@@ -1,0 +1,62 @@
+---
+import { Image } from "astro:assets";
+import { motto } from "../../data";
+
+// Drop a real image in and pass it as `src`; without one the banner draws
+// itself from the palette so there's no stock-photo placeholder to remove.
+type Props = { src?: ImageMetadata };
+const { src } = Astro.props;
+
+// Rendered server-side so the chip isn't blank before the clock script runs.
+const now = new Date();
+const stamp = [now.getHours(), now.getMinutes(), now.getSeconds()]
+  .map((n) => String(n).padStart(2, "0"))
+  .join(".");
+---
+<div
+  class="relative aspect-[11/4] overflow-hidden rounded-lg border border-line bg-panel"
+>
+  {src ? (
+    <Image src={src} alt="" width={1760} densities={[2]} class="size-full object-cover" />
+  ) : (
+    <>
+      <!-- Two offset washes plus a hairline grid: enough texture to read as
+           a designed surface, no asset to download. -->
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[radial-gradient(120%_120%_at_15%_0%,color-mix(in_oklab,var(--color-fg)_9%,transparent),transparent_55%),radial-gradient(90%_90%_at_85%_100%,color-mix(in_oklab,var(--color-fg)_6%,transparent),transparent_50%)]"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 opacity-60 [background-image:repeating-linear-gradient(to_right,var(--color-line)_0_1px,transparent_1px_88px),repeating-linear-gradient(to_bottom,var(--color-line)_0_1px,transparent_1px_88px)] [mask-image:radial-gradient(80%_80%_at_50%_50%,#000,transparent)]"
+      ></div>
+
+      <p
+        class="absolute inset-0 grid place-items-center px-8 text-center text-balance text-[clamp(1.15rem,3.4vw,2rem)] font-semibold leading-tight tracking-[-0.03em]"
+      >
+        {motto}
+      </p>
+    </>
+  )}
+
+  <!-- The detail that sells it: a live clock, not a decorative label. -->
+  <time
+    data-banner-clock
+    class="absolute bottom-3 right-3 rounded-[5px] border border-line bg-bg/75 px-2 py-1 font-mono text-micro tabular-nums text-muted backdrop-blur-sm"
+  >
+    {stamp}
+  </time>
+</div>
+
+<script>
+  const el = document.querySelector<HTMLTimeElement>("[data-banner-clock]");
+  if (el) {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const tick = () => {
+      const d = new Date();
+      el.textContent = `${pad(d.getHours())}.${pad(d.getMinutes())}.${pad(d.getSeconds())}`;
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
+</script>

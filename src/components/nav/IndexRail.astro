@@ -1,0 +1,64 @@
+---
+type Props = { sections: { id: string; label: string }[] };
+const { sections } = Astro.props;
+---
+<!-- Pinned to the right edge of the viewport, independent of the centred
+     content column. Hidden below xl, where it would overlap that column. -->
+<nav
+  aria-label="Page index"
+  data-index-rail
+  class="fixed right-8 top-1/2 z-30 hidden -translate-y-1/2 xl:block"
+>
+  <p class="mb-5 text-micro font-medium uppercase tracking-[0.18em] text-faint">Index</p>
+  <ul class="m-0 grid list-none gap-2.5 p-0">
+    {sections.map((s) => (
+      <li>
+        <a
+          href={`#${s.id}`}
+          data-rail-link={s.id}
+          class="group flex items-center gap-2 text-meta text-muted no-underline transition-colors duration-200 hover:text-fg aria-[current=true]:font-medium aria-[current=true]:text-fg"
+        >
+          <!-- The dash only occupies space when active, so inactive rows
+               stay flush with the label column. -->
+          <span
+            aria-hidden="true"
+            class="h-px w-0 bg-fg transition-all duration-300 group-aria-[current=true]:w-3.5"
+          ></span>
+          {s.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-rail-link]");
+  const targets = [...links]
+    .map((l) => document.getElementById(l.dataset.railLink!))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (targets.length) {
+    const setActive = (id: string) =>
+      links.forEach((l) =>
+        l.setAttribute("aria-current", String(l.dataset.railLink === id)),
+      );
+
+    // Track every section's visibility and pick the topmost visible one, so
+    // scrolling up highlights correctly instead of latching on the last hit.
+    const visible = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        const first = targets.find((t) => visible.has(t.id));
+        if (first) setActive(first.id);
+      },
+      // Bias the band toward the upper half of the viewport.
+      { rootMargin: "-15% 0px -55% 0px" },
+    );
+
+    targets.forEach((t) => observer.observe(t));
+  }
+</script>
