@@ -19,25 +19,11 @@ export const projects: Project[] = [
     highlight: true,
   },
   {
-    name: "Payment Simulator",
-    repo: "payment-simulator",
-    blurb:
-      "Payment API with machine-learning fraud detection. Simulates UPI transaction flows with configurable success rates, tracks status transitions, and scores transactions in real time. Flask and PostgreSQL, containerized behind Gunicorn.",
-    tags: ["Flask", "PostgreSQL", "ML", "Docker"],
-  },
-  {
     name: "Cow Yield Model",
     repo: "cow-yield-model",
     blurb:
       "Random forest pipeline predicting milk yield per cow from feed quality, fodder type, exercise, weather and history. Shipped end to end: EDA notebook, training pipeline, serialized model and a serving API.",
     tags: ["Python", "scikit-learn", "API"],
-  },
-  {
-    name: "NutriVision",
-    repo: "NutriVision",
-    blurb:
-      "AI-assisted nutrient tracking. Turns what you eat into structured nutritional data instead of another manual food diary.",
-    tags: ["TypeScript", "AI"],
   },
   {
     name: "Backend boilerplates",

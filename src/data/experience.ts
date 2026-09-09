@@ -27,7 +27,7 @@ export const experience: Employer[] = [
   },
   {
     org: "Midnight",
-    url: null,
+    url: "https://midnight.foundation",
     period: "3 mos",
     roles: [
       {
