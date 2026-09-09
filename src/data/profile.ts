@@ -11,6 +11,9 @@ export const pitch = "I build backend systems that survive growth.";
 export const subpitch =
   "Most teams discover their infrastructure can't scale only after it starts costing them customers. I'm the engineer who fixes that before it happens, and the one who has been called in at 2am when nobody did.";
 
+/** Set in the banner. Short enough to read as a statement, not a sentence. */
+export const motto = "Ship it. Then make it survive.";
+
 export const closing =
   "If you're building something that needs to work, not just launch, let's talk. Open to conversations about engineering leadership, backend architecture, and scaling teams that ship reliable systems.";
 

@@ -1,4 +1,4 @@
-import { getProfile, getRepos, getContributions } from "./github";
+import { getRepos, getContributions } from "./github";
 import { withIcons } from "./icons";
 import { projects, stack, links } from "../data";
 import type { ResolvedProject } from "../types";
@@ -6,11 +6,11 @@ import type { ResolvedProject } from "../types";
 /**
  * Everything the page needs, resolved once. Copy stays hand-written in
  * src/data; stars, source URLs and live links come from GitHub at build time
- * so they never go stale.
+ * so they never go stale. The avatar is a local asset, not the GitHub one,
+ * so no profile request is made.
  */
 export async function loadContent() {
-  const [profile, repos, contributions] = await Promise.all([
-    getProfile(),
+  const [repos, contributions] = await Promise.all([
     getRepos(),
     getContributions(),
   ]);
@@ -33,5 +33,5 @@ export async function loadContent() {
     withIcons(links),
   ]);
 
-  return { profile, contributions, work, stackGroups, socials };
+  return { contributions, work, stackGroups, socials };
 }

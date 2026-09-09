@@ -1,18 +1,20 @@
 ---
-type Props = { title: string; id: string; center?: boolean };
-const { title, id, center = false } = Astro.props;
+type Props = { title: string; id: string; index: number };
+const { title, id, index } = Astro.props;
+
+// The id lives on the <section> so the scroll-spy observes the whole block,
+// not just its heading; the h2 gets a derived id for aria-labelledby.
+const headingId = `${id}-title`;
 ---
-<section
-  aria-labelledby={id}
-  class:list={["mt-[clamp(3.5rem,9vw,5rem)]", center ? "text-center" : "text-left"]}
->
-  <h2
-    id={id}
-    data-reveal
-    class="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted"
-  >
-    {title}
-  </h2>
+<section id={id} aria-labelledby={headingId} class="mt-section scroll-mt-24">
+  <!-- 2rem gutter: the section number, the timeline dots and the service
+       markers all share this column, so everything below lines up. -->
+  <div data-reveal class="mb-8 grid grid-cols-[2rem_1fr] items-baseline">
+    <span aria-hidden="true" class="font-mono text-micro text-faint">#{index}</span>
+    <h2 id={headingId} class="text-micro font-medium uppercase tracking-[0.2em] text-muted">
+      {title}
+    </h2>
+  </div>
   <div data-reveal style="--i: 1">
     <slot />
   </div>

@@ -1,6 +1,6 @@
 ---
 import ThemeScript from "../components/theme/ThemeScript.astro";
-import ThemeToggle from "../components/theme/ThemeToggle.astro";
+import SiteHeader from "../components/nav/SiteHeader.astro";
 import Reveal from "../components/ui/Reveal.astro";
 import "../styles/global.css";
 
@@ -8,7 +8,7 @@ type Props = { title: string; description: string };
 const { title, description } = Astro.props;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" id="top">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,7 +29,7 @@ const { title, description } = Astro.props;
     <Reveal />
   </head>
   <body>
-    <ThemeToggle />
+    <SiteHeader />
     <slot />
   </body>
 </html>
