@@ -26,6 +26,8 @@ export type ResolvedProject = Project & {
 export type Role = {
   title: string;
   period: string;
+  duration: string;
+  type?: string;
   location: string | null;
   blurb: string;
   tags: Tag[];
