@@ -12,6 +12,12 @@ const slug = (org: string) => org.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 const logoFor = (org: string) =>
   Object.entries(logos).find(([path]) => path.split("/").pop()!.split(".")[0] === slug(org))?.[1].default;
 
+const tiles: Record<string, string> = {
+  inboxkit: "bg-white p-1.5",
+  techsolace: "bg-black p-1.5",
+};
+const tileFor = (org: string) => tiles[slug(org)] ?? "bg-bg";
+
 const initials = (org: string) => org.slice(0, 2).toUpperCase();
 ---
 <ol data-reveal-group class="m-0 grid list-none gap-9 p-0">
@@ -22,7 +28,7 @@ const initials = (org: string) => org.slice(0, 2).toUpperCase();
     return (
       <li class="grid grid-cols-[2.5rem_1fr] gap-x-4 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-line [&:not(:last-child)]:pb-9">
         {logo ? (
-          <Image src={logo} alt="" width={80} height={80} class="size-10 rounded-md border border-line bg-bg object-contain" />
+          <Image src={logo} alt="" width={80} height={80} class={`size-10 rounded-md border border-line object-contain ${tileFor(e.org)}`} />
         ) : (
           <span
             aria-hidden="true"
