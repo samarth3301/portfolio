@@ -26,7 +26,7 @@ const initials = (org: string) => org.slice(0, 2).toUpperCase();
     const lead = e.roles[0];
     const logo = logoFor(e.org);
     return (
-      <li class="grid grid-cols-[2.5rem_1fr] gap-x-4 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-line [&:not(:last-child)]:pb-9">
+      <li class="grid grid-cols-[2.5rem_1fr] gap-x-4 not-last:border-b not-last:border-line not-last:pb-9">
         {logo ? (
           <Image src={logo} alt="" width={80} height={80} class={`size-10 rounded-md border border-line object-contain ${tileFor(e.org)}`} />
         ) : (
@@ -68,12 +68,12 @@ const initials = (org: string) => org.slice(0, 2).toUpperCase();
               {lead.location && <p class="text-meta text-faint">{lead.location}</p>}
 
               <ol class="relative m-0 mt-5 grid list-none gap-6 p-0">
-                <span aria-hidden="true" class="absolute bottom-2 left-[3px] top-2 w-px bg-line"></span>
+                <span aria-hidden="true" class="absolute bottom-2 left-0.75 top-2 w-px bg-line"></span>
                 {e.roles.map((r) => (
                   <li class="relative pl-5">
                     <span
                       aria-hidden="true"
-                      class="absolute left-0 top-[0.5rem] size-[7px] rounded-full bg-line-strong"
+                      class="absolute left-0 top-2 size-1.75 rounded-full bg-line-strong"
                     ></span>
                     <h4 class="text-body font-semibold">{r.title}</h4>
                     {r.type && <p class="text-body">{r.type}</p>}
