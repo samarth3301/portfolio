@@ -19,7 +19,7 @@ export const closing =
 
 export const contact = {
   email: "chat@samarthh.me",
-  call: "https://cal.com/samarth0310",
+  call: "https://cal.com/samarthh/",
 };
 
 export const github = { user: "samarth3301" };
