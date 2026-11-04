@@ -1,16 +1,23 @@
-import type { Employer } from "../types";
+import type { Employer, Role } from "../types";
+import { formatDuration, formatPeriod, months } from "../lib/tenure";
 
-/** Grouped by employer, newest first. */
-export const experience: Employer[] = [
+type RoleEntry = Omit<Role, "period" | "duration"> & {
+  start: string;
+  end: string | null;
+};
+
+type EmployerEntry = Omit<Employer, "period" | "roles"> & { roles: RoleEntry[] };
+
+/** Grouped by employer, newest first. Dates are YYYY-MM; end null means present. */
+const entries: EmployerEntry[] = [
   {
     org: "Inboxkit",
     url: "https://inboxkit.com",
-    period: "1 mo",
     roles: [
       {
         title: "Software Engineer",
-        period: "Oct 2026 - Present",
-        duration: "1 mo",
+        start: "2026-10",
+        end: null,
         type: "Full-time",
         location: "Gurugram, Haryana, India",
         blurb:
@@ -22,12 +29,11 @@ export const experience: Employer[] = [
   {
     org: "Techsolace",
     url: "https://techsolace.in",
-    period: "2 yrs 9 mos",
     roles: [
       {
         title: "Chief Technology Officer",
-        period: "Oct 2024 - Present",
-        duration: "2 yrs 1 mo",
+        start: "2024-10",
+        end: null,
         type: "Part-time",
         location: "Jaipur, Rajasthan, India",
         blurb:
@@ -36,8 +42,8 @@ export const experience: Employer[] = [
       },
       {
         title: "Back End Developer",
-        period: "Feb 2024 - Oct 2024",
-        duration: "9 mos",
+        start: "2024-02",
+        end: "2024-10",
         type: "Full-time",
         location: "Jaipur, Rajasthan, India",
         blurb:
@@ -49,12 +55,11 @@ export const experience: Employer[] = [
   {
     org: "Midnight",
     url: "https://midnight.foundation",
-    period: "3 mos",
     roles: [
       {
         title: "Tech Lead, Brickchain",
-        period: "Feb 2026 - Apr 2026",
-        duration: "3 mos",
+        start: "2026-02",
+        end: "2026-04",
         location: null,
         blurb:
           "Selected into a limited cohort of builders in Midnight's Build Club. Architected the backend and smart contract systems for Brickchain, a privacy-first real estate tokenization platform.",
@@ -65,12 +70,11 @@ export const experience: Employer[] = [
   {
     org: "Major League Hacking",
     url: "https://mlh.io",
-    period: "3 mos",
     roles: [
       {
         title: "Software Engineering Fellow",
-        period: "Oct 2025 - Dec 2025",
-        duration: "3 mos",
+        start: "2025-10",
+        end: "2025-12",
         location: "New York, United States",
         // The source PDF repeats the Brickchain text here; replace with the real one.
         blurb:
@@ -82,12 +86,11 @@ export const experience: Employer[] = [
   {
     org: "Freelance",
     url: null,
-    period: "2 yrs 9 mos",
     roles: [
       {
         title: "Back End Developer",
-        period: "Oct 2021 - Jun 2024",
-        duration: "2 yrs 9 mos",
+        start: "2021-10",
+        end: "2024-06",
         location: "New Delhi, India",
         blurb:
           "Sustained multi-client delivery: designed and built 20+ dashboards and admin panels across Django, Spring Boot and Express.js, meeting varied technical and business requirements over a 2.9-year engagement.",
@@ -96,3 +99,23 @@ export const experience: Employer[] = [
     ],
   },
 ];
+
+const resolve = ({ roles, ...org }: EmployerEntry): Employer => {
+  const spans = roles.map(({ start, end }) => ({ start, end }));
+  const earliest = spans.reduce((a, b) => (a.start <= b.start ? a : b));
+  const latest = spans.some((s) => s.end === null)
+    ? null
+    : spans.reduce((a, b) => (a.end! >= b.end! ? a : b)).end;
+
+  return {
+    ...org,
+    period: formatDuration(months(earliest.start, latest)),
+    roles: roles.map(({ start, end, ...role }) => ({
+      ...role,
+      period: formatPeriod(start, end),
+      duration: formatDuration(months(start, end)),
+    })),
+  };
+};
+
+export const experience: Employer[] = entries.map(resolve);
